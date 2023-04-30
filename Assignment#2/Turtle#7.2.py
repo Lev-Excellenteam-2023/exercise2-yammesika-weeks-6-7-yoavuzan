@@ -38,7 +38,7 @@ class PostOffice:
             user_box.append(message_details)
         return self.message_id
 
-    def read_inbox(self, username, n=None):
+    def read_inbox(self, username, text=None):
         """read txt in all inbox of username.
 
                       :param str username: the name of user name
@@ -47,31 +47,29 @@ class PostOffice:
                       :rtype: list
                       :raises KeyError: if the username does not exist.
                       """
-        if n == None:
-            n = len(self.boxes[username])
+
+        if text == None:
+            text = len(self.boxes[username])
         result = []
-        for i in range(0, n):
-            msg = self.boxes[username][i]
-            if not msg['read']:
+        for index in range(0, text):
+            message = self.boxes[username][index]
+            if not message['read']:
                 self.boxes[username]['read'] = True
-                result.append(msg)
+                result.append(message)
 
         return result
 
 
-    def search_inbox(self, username, txt):
+
+    def search_inbox(self, username, text):
         """search txt in all inbox of username.
 
               :param str username: the name of user name
-              :param str txt: The text to search in message_body or in subject
+              :param str text: The text to search in message_body or in subject
               :return: The list of all messages
               :rtype: list
               :raises KeyError: if the username does not exist.
               """
-        result = []
-        user_for_check = self.boxes[username]
-        for msg in user_for_check :
-            if txt in user_for_check['body'] or txt in user_for_check['subject']:
-                result.append(msg)
+        result = [message for message in self.boxes[username] if text in message['body'] or text in message['subject']]
 
         return result
